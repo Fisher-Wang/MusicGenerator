@@ -1,0 +1,28 @@
+import mido
+import time
+import numpy as np
+#0对应休止符 1对应F3...26对应G5
+#单位时8分音符
+dataset = [5,8,8,10,10,12,12,12,12,12,12,12,5,5,3,3,3,3,0,5,8,9]
+notes=[12,12,12,3,5,8,9]
+#亲爱的学长们呀，dataset我们默认你们已经处理成这样类似的数据集啦
+#写的过于简单，感觉不用注释啦，注释是对你们能力的藐视
+#返回值0到100都有可能，如果需要和其他fitnessfunction拼在一起建议做一下正态分布先
+def fitnessfunction():
+    malkov = np.zeros((30, 30, 30), dtype=np.float)
+    total=np.zeros((30, 30), dtype=np.int)
+    for i in range(2,len(dataset)):
+        malkov[dataset[i-2]][dataset[i-1]][dataset[i]]+=1
+        total[dataset[i-2]][dataset[i-1]]+=1
+    for i in range(0,28):
+        for j in range(0,28):
+            for k in range(0,28):
+                if total[i][j]!=0:
+                    malkov[i][j][k]=malkov[i][j][k]/total[i][j]
+    eachpitch=float(100/320)#320默认40小节160拍中一共有320个八分音符
+    totalscore=eachpitch*2
+    for  i in range(2,len(notes)):
+        totalscore+=eachpitch*malkov[notes[i-2]][notes[i-1]][notes[i]]
+    return totalscore
+print(fitnessfunction())
+
