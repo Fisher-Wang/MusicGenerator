@@ -14,3 +14,16 @@ python test.py
 
 ### Dataset
 Among all the musicians, Bach, Clementi and Mozart are selected, and Bach's music is commanded for our task. 
+
+## Net
+### TO change dataset
+
+see `prepare_data.py`
+
+### TO train the net
+
+`python net.py`
+
+### TO generate music
+
+`python ea.py`
