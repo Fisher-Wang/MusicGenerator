@@ -3,10 +3,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-import sys
-import matplotlib.pyplot as plt
-import copy
-import scipy
 
 music_length = 32
 

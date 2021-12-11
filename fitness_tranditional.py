@@ -48,9 +48,12 @@ def fitness_tranditional(notes):
         note2 = str(note2).replace("'", "").split('-')[0]
         itv = intervals.determine(note1, note2)
         if itv not in score_dict:
-            raise('itv not found!')
-        tot_score += score_dict[itv]
-        print("%3s %3s %15s %1d" % (Note(notes[i]), Note(notes[i+1]), itv, score_dict[itv]))
+            # print(itv)
+            # raise('itv not found!')
+            tot_score += 3
+        else:
+            tot_score += score_dict[itv]
+        # print("%3s %3s %15s %1d" % (Note(notes[i]), Note(notes[i+1]), itv, score_dict[itv]))
     return tot_score
 
 if __name__ == '__main__':

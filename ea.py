@@ -16,37 +16,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 import sys
-import matplotlib.pyplot as plt
 import copy
 import scipy
-
-music_length = 32
-
-
-class CYQNN(nn.Module):
-    def __init__(self,n_extra_layers=0):
-        super().__init__()
-        self.fc1 = nn.Linear(music_length, 2 * music_length, bias=False)
-        self.sig1 = torch.nn.Sigmoid()
-        self.fc2 = nn.Linear(2 * music_length, 2 * music_length, bias=False)
-        self.sig2 = torch.nn.Sigmoid()
-        self.fc3 = nn.Linear(2 * music_length, 2, bias=False)
-        self.softmax = nn.Softmax(dim=1)
-
-        self.fc1.weight.data.normal_(0, 1)
-        self.fc2.weight.data.normal_(0, 1)
-        self.fc3.weight.data.normal_(0, 1)
-
-
-    def forward(self, x):
-        out = self.sig1(self.fc1(x))
-        out = self.sig2(self.fc2(out))
-        out = self.fc3(out)
-        out = self.softmax(out)
-        return out
-
-net = CYQNN()
-net.load_state_dict(torch.load("net_final.pkl"))
+from fitness_ANN import fitness_ANN
+from fitness_tranditional import fitness_tranditional
 
 class EvolutionController:
     def __init__(self, mutate_prob=0.1, population_size=100, n_evolution=100, parent_fraction=0.5, mutation_fraction=0.5, crossover_fraction=0, log_path='output/'):
@@ -188,13 +161,8 @@ class MusicIndividual:
     
     
     def evaluate(self):
-        music = torch.Tensor(self.music)
-        music = (music + 52) / 100 - 0.6
-        music = music.reshape((1, 32))
-        
-        output = net(music)
-
-        return output[0][1]
+        # return fitness_ANN(self.music)
+        return -fitness_tranditional(self.music)
     
     def mutate(self):
         child_music=copy.deepcopy(self.music)
