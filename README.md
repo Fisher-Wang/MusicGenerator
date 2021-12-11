@@ -27,3 +27,6 @@ see `prepare_data.py`
 ### TO generate music
 
 `python ea.py`
+
+## Use your own fitness function(new!)
+To use your own fitness function, modify the `evaluate` method in class `MusicIndivisual`
