@@ -1,15 +1,10 @@
 #滑动窗口的长度和缓冲区的长度由人选定
-#疑问：采取这种获取数据集的方式，如何保证均为一种拍子（如4/4拍）
-
-notes = [12,12,12,3,5,8,9,7]
-dataset = ([12,12,12,12,5,5,3,3],[5,8,8,10,1,8,9,7],[3,3,0,5,8,9,7,12])
+import numpy as np
 
 class LZ77:
-
     def __init__(self, window_size):
         self.window_size = window_size
-        self.buffer_size = 4
-
+        self.buffer_size = 2
     def longest_match(self, data, cursor):
         end_buffer = min(cursor + self.buffer_size, len(data))
 
@@ -42,16 +37,35 @@ class LZ77:
             i += (l+1)
         return cnt
 
-def fitnessfunction():
+def fitness_compress(music):
     totaldis = 0
     for datanum in range(len(dataset)):
         cx = compressor.compress(dataset[datanum])
-        cy = compressor.compress(notes)
-        cxy = compressor.compress(notes+dataset[datanum])
+        cy = compressor.compress(music)
+        cxy = compressor.compress(music+dataset[datanum])
         totaldis += ( cxy - min(cx,cy) ) / max(cx,cy)
 #        print(cx,cy,cxy,totaldis)
     return 1/totaldis
 
+notes = 32*[1]
+note = np.load("notes.npy")
+dataset=[]
+cnt=0
+for sublist in note:
+    cnt+=cnt
+    if cnt>3:
+        break
+    flag=0
+    prelist = []
+    for item in sublist:
+        if(item>=52 and item<=79):
+           prelist.append(int(item-52))
+        else:
+            flag = 1
+            break
+    if(flag == 0):
+        dataset.append(prelist)
+compressor = LZ77(4)
+
 if __name__ == '__main__':
-    compressor = LZ77(6)
-    print(fitnessfunction())
+    print(fitness_compress(notes))
